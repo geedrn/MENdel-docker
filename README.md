@@ -13,7 +13,7 @@ cd MENdel_root
 
 2. **Lindel installation**
 
-   Lindel is compatible with ```Python2.7``` and ```Python3.5``` or higher. Follow instructions at https://www.python.org/ or https://www.anaconda.com/ for installation.
+   Lindel is compatible with ```Python2.7``` and ```Python3.5``` or higher.
    
    Unix users will have Python pre-installed on their systems, however follow instructions given at https://docs.python.org/3/using/unix.html for any additional features installation
    
