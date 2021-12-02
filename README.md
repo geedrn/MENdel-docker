@@ -27,10 +27,12 @@ cd MENdel_root
    
    ```
    git clone https://github.com/FriedbergLab/MENdel-command-line/
-   cd MENdel
+   cd MENdel-command-line
    ```
    
    Alternatively, use the green "Code" button in the upper right corner and choose "Download ZIP"
+   
+   **Required Python packages installation**
    
    - For Windows users
    
