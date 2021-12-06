@@ -8,12 +8,14 @@ def runMenthu(args):
     #subprocess.run(["Rscript", "ExampleRScript.R"])
     menthudir = ''
     lindeldir = ''
-    for i in os.listdir("../"):
+    for i in os.listdir(".."+ os.sep):
         if "MENTHU" in i:
             menthudir = i
         elif "Lindel" in i:
             lindeldir = i
-    os.chdir("../"+menthudir)
+    os.chdir(".." + os.sep + menthudir)
+    #print(menthudir)
+    #print(os.getcwd())
     subprocess.run(["Rscript", "menthu-cmd.R", args.Outfile, args.crispr, args.pam, args.dist2dsb, args.overhang,
                        args.talenOption, args.talenScheme, args.genInputType, args.genInput, args.scoreThreshold,
                         args.T7opt, args.verbose, args.validate])
@@ -24,16 +26,18 @@ def runMenthu(args):
         time_counter += 1
         if time_counter > time_to_wait:
             break
-    shutil.move(args.Outfile, "..\\" + args.Outfile)
+    shutil.move(args.Outfile, ".." + os.sep + args.Outfile)
     os.chdir("..")
     runLindel(args.Outfile, lindeldir)
 
 
 def runLindel(outfile, lindeldir):
-    shutil.move(outfile, lindeldir+"\\"+outfile)
+    shutil.move(outfile, lindeldir+os.sep+outfile)
     os.chdir(lindeldir)
     df = pd.read_csv(outfile)
     i = 0
+    lindelScore = []
+    lindelPrediction = []
     for j in df['Tool_Type']:
         #print(df.iloc[i])
         #print(j)
@@ -47,17 +51,61 @@ def runLindel(outfile, lindeldir):
             dna_string = dna_string[:-10]
             #print(dna_string)
             #print(df['MENTHU_Score'][i])
-        subprocess.run(["python", "Lindel_prediction.py", dna_string, "test_out"])
-        txt = glob.glob(os.getcwd()+"\\test_out*.txt")
+        subprocess.run(["python", "Lindel_prediction.py", str(dna_string), "test_out"])
+        txt = glob.glob(os.getcwd()+os.sep+"test_out*.txt")
         for txtfile in txt:
             shutil.move(txtfile, str(outfile[:-4])+"_"+str(i+1)+".tsv")
-            fh = open(str(outfile[:-4])+"_"+str(i+1)+".tsv", "a")
-            fh.seek(0)
-            fh.write(str(df.iloc[i]))
+            fho = open(str(outfile[:-4])+"_"+str(i+1)+".tsv", "r")
+            fho.readline()
+            for lindelLine in fho:
+                #print(lindelLine)
+                if "I" in lindelLine.rstrip().split("\t")[2]:
+                    lindelScore.append(lindelLine.rstrip().split("\t")[1])
+                    lindelPrediction.append(lindelLine.rstrip().split("\t")[2])
+                    #print(lindelLine.rstrip().split("\t")[2])
+                    break
+            fho.close()
+            fh = open(str(outfile[:-4])+"_"+str(i+1)+".tsv", "r+")
+            content = fh.read()
+            fh.seek(0, 0)
+            fh.write(str(df.iloc[i]) + "\n" + str(content))
             fh.close()
-        shutil.move(str(outfile[:-4])+"_"+str(i+1)+".tsv", "..\\"+str(outfile[:-4])+"_"+str(i+1)+".tsv")
+        shutil.move(str(outfile[:-4])+"_"+str(i+1)+".tsv", ".." + os.sep + str(outfile[:-4])+"_"+str(i+1)+".tsv")
         i += 1
-    shutil.move(outfile, "..\\"+outfile)
+    shutil.move(outfile, ".." + os.sep + outfile)
+    outputProcessing(outfile, lindelScore, lindelPrediction)
+
+
+def outputProcessing(outfile, lindelScore, lindelPrediction):
+    os.chdir("..")
+    fhs = open("MENdelSummary_"+str(outfile[:-4])+".txt", "w")
+    fhs.write("Target Sequence\tMENdel SMO\tSMO via MENTHU\tMENTHU Score\tMENTHU Microhomology\tSMO via Lindel\tLindel Score\tLindel Inserted base\tFrameshift\n")
+    fhr = open(os.getcwd()+os.sep+str(outfile[:-4])+".csv")
+    i = 0
+    fhr.readline()
+    for line in fhr:
+        menthuOut = line.rstrip().split(",")
+        fhs.write(str(menthuOut[0])+"\t")
+        #print(menthuOut[1], lindelScore[i])
+        if float(menthuOut[1]) > 1.5 or float(lindelScore[i]) > 50.00:
+            fhs.write("1\t")
+            if float(menthuOut[1]) > 1.5:
+                fhs.write("Yes\t" + str(menthuOut[1]) + "\t" + str(menthuOut[7]) + "\t")
+            else:
+                fhs.write("No\t" + str(menthuOut[1]) + "\tNA\t")
+
+            if float(lindelScore[i]) > 50.00:
+                fhs.write("Yes\t" + str(lindelScore[i]) + "\t" + lindelPrediction[i] + "\t")
+            else:
+                fhs.write("No\t" + str(lindelScore[i]) + "\tNA\t")
+        else:
+            fhs.write("0\tNo\t" + str(menthuOut[1]) + "\tNA\tNo\t" + str(lindelScore[i]) + "\tNA\t")
+        fhs.write(menthuOut[2]+"\n")
+        i += 1
+    fhr.close()
+    fhs.close()
+    txt = glob.glob(os.getcwd()+os.sep+str(outfile[:-4])+"*.tsv")
+    #print(str(outfile[:-4]))
 
 
 def main():
