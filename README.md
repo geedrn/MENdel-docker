@@ -19,7 +19,7 @@ cd MENdel_root
    
    Windows users can follow instructions to install Python given at https://docs.python.org/3/using/windows.html
    
-   After successful setup of Python, follow instructions at https://github.com/shendurelab/Lindel to install Lindel within the directory MENdel_root
+   After successful setup of Python, follow instructions at https://github.com/FriedbergLab/Lindel (originally from https://github.com/shendurelab/Lindel, but forked here for convenience) to install Lindel within the directory MENdel_root
 
 3. **MENdel and required Python packages installation**
 
@@ -54,7 +54,7 @@ cd MENdel_root
 
    Check to make sure you're using the correct command for your system!
 
-   MENdel-command-line can be run using the following syntax:
+   MENdel-command-line can be run using the following syntax, which will generate output inside a directory named **MENdel_Output** located under **MENdel_root**.
    
    - For Windows users
    
