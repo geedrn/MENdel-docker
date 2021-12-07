@@ -92,6 +92,8 @@ cd MENdel_root
 
 6. **Examples**
 
+   Find outputs inside a directory named **MENdel_Output** located under **MENdel_root**.
+
    - Ensembl, Unix OS:
    
    ```
