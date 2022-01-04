@@ -61,7 +61,7 @@ def runLindel(outfile, lindeldir):
             dna_string = dna_string[:-10]
             # print(dna_string)
             # print(df['MENTHU_Score'][i])
-        subprocess.run(["python3", ".."+os.sep+lindeldir+os.sep+"Lindel_prediction.py", str(dna_string), "test_out"])
+        subprocess.run(["python", ".."+os.sep+lindeldir+os.sep+"Lindel_prediction.py", str(dna_string), "test_out"])
         txt = glob.glob(os.getcwd() + os.sep + "test_out*.txt")
         for txtfile in txt:
             shutil.move(txtfile, str(outfile[:-4]) + "_" + str(i + 1) + ".tsv")
