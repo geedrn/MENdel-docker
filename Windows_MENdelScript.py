@@ -101,7 +101,8 @@ def outputProcessing(outfile, lindelScore, lindelPrediction):
         fhs.write(str(menthuOut[0]) + "\t")
         # print(menthuOut[1], lindelScore[i])
         if float(menthuOut[1]) > 1.5 or float(lindelScore[i]) > 50.00:
-            fhs.write("1\t")
+            #fhs.write("1\t")
+            fhs.write("Yes\t")
             if float(menthuOut[1]) > 1.5:
                 fhs.write("Yes\t" + str(menthuOut[1]) + "\t" + str(menthuOut[7]) + "\t")
             else:
