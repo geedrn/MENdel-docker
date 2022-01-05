@@ -90,7 +90,11 @@ cd MENdel_root
    |**Verbose**        |T or F       |F        |If T (true), outputs progress messages to the console.|
    |**Validate**       |T or F       |F        |If T (true), checks the command line arguments to make sure they are all valid (this may take some time); if F, skip validation checks.|
 
-6. **Examples**
+6. **Frameshift mutation prediction via MENdel**
+   
+   When both MENTHU and Lindel predict an SMO, but MENTHU predicts a non-frameshift mutation, we output MENdel frameshift as a **Yes** since Lindel has a better positive predictive value than MENTHU.
+
+8. **Examples**
 
    Find outputs inside a directory named **MENdel_Output** located under **MENdel_root**.
 
