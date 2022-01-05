@@ -91,8 +91,8 @@ def outputProcessing(outfile, lindelScore, lindelPrediction):
     # os.chdir("..")
     fhs = open("MENdelSummary_" + str(outfile[:-4]) + ".tsv", "w")
     fhs.write(
-        "Target Sequence\tMENdel SMO\tSMO via MENTHU\tMENTHU Score\tMENTHU Microhomology\tSMO via Lindel\tLindel "
-        "Score\tLindel Inserted base\tFrameshift\n")
+        "Target Sequence\tMENdel SMO\tSMO via MENTHU\tMENTHU Score\tMENTHU Microhomology\tMENTHU Frameshift\t"
+        "SMO via Lindel\tLindelScore\tLindel Inserted base\tMENdel Frameshift\n")
     fhr = open(os.getcwd() + os.sep + str(outfile[:-4]) + ".csv")
     i = 0
     fhr.readline()
@@ -101,19 +101,21 @@ def outputProcessing(outfile, lindelScore, lindelPrediction):
         fhs.write(str(menthuOut[0]) + "\t")
         # print(menthuOut[1], lindelScore[i])
         if float(menthuOut[1]) > 1.5 or float(lindelScore[i]) > 50.00:
-            fhs.write("1\t")
+            #fhs.write("1\t")
+            fhs.write("Yes\t")
             if float(menthuOut[1]) > 1.5:
-                fhs.write("Yes\t" + str(menthuOut[1]) + "\t" + str(menthuOut[7]) + "\t")
+                fhs.write("Yes\t" + str(menthuOut[1]) + "\t" + str(menthuOut[7]) + "\t" + menthuOut[2] + "\t")
             else:
-                fhs.write("No\t" + str(menthuOut[1]) + "\tNA\t")
+                fhs.write("No\t" + str(menthuOut[1]) + "\tNA\t" + menthuOut[2] + "\t")
 
             if float(lindelScore[i]) > 50.00:
-                fhs.write("Yes\t" + str(lindelScore[i]) + "\t" + lindelPrediction[i] + "\t")
+                fhs.write("Yes\t" + str(lindelScore[i]) + "\t" + lindelPrediction[i] + "\t" + "Yes" + "\n")
             else:
-                fhs.write("No\t" + str(lindelScore[i]) + "\tNA\t")
+                fhs.write("No\t" + str(lindelScore[i]) + "\t" + lindelPrediction[i] + "\t" + menthuOut[2] + "\n")
         else:
-            fhs.write("0\tNo\t" + str(menthuOut[1]) + "\tNA\tNo\t" + str(lindelScore[i]) + "\tNA\t")
-        fhs.write(menthuOut[2] + "\n")
+            fhs.write("No\tNo\t" + str(menthuOut[1]) + "\tNA\t" + menthuOut[2] + "\tNo\t" + str(lindelScore[i]) + "\t" +
+                      lindelPrediction[i] + "\t" + menthuOut[2] + "\n")
+        # fhs.write(menthuOut[2] + "\n")
         i += 1
     fhr.close()
     fhs.close()
