@@ -97,13 +97,13 @@ cd MENdel_root
    - Ensembl, Unix OS:
    
    ```
-   python MENdelScript.py -o EnsemblExample.csv -c T -p NGG -d -3 -oh 0 -to F -ts 0 -g ens -i ENSDART00000011520 -st 1.5 -t7 F -v F -va F
+   python MENdelScript.py -o EnsemblExample.csv -c T -p NGG -d -3 -oh 0 -to F -ts 0 -g ens -i ENSDART00000011520.8 -st 1.5 -t7 F -v F -va F
    ```
    
    - Ensembl, Windows:
    
    ```
-   python Windows_MENdelScript.py -o EnsemblExample.csv -g ens -i ENSDART00000011520 -st 1.5
+   python Windows_MENdelScript.py -o EnsemblExample.csv -g ens -i ENST00000244571.5 -st 1.0
    ```
 
    - GenBank, Mac:
