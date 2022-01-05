@@ -111,9 +111,9 @@ def outputProcessing(outfile, lindelScore, lindelPrediction):
             if float(lindelScore[i]) > 50.00:
                 fhs.write("Yes\t" + str(lindelScore[i]) + "\t" + lindelPrediction[i] + "\t")
             else:
-                fhs.write("No\t" + str(lindelScore[i]) + "\tNA\t")
+                fhs.write("No\t" + str(lindelScore[i]) + "\t" + lindelPrediction[i] + "\t")
         else:
-            fhs.write("0\tNo\t" + str(menthuOut[1]) + "\tNA\tNo\t" + str(lindelScore[i]) + "\tNA\t")
+            fhs.write("No\tNo\t" + str(menthuOut[1]) + "\tNA\tNo\t" + str(lindelScore[i]) + "\t" + lindelPrediction[i] +"\t")
         fhs.write(menthuOut[2] + "\n")
         i += 1
     fhr.close()
