@@ -22,7 +22,7 @@ def runMenthu(args):
     os.chdir(".." + os.sep + menthudir)
     # print(menthudir)
     # print(os.getcwd())
-    subprocess.run(["Rscript", "menthu.R", ".."+os.sep+outdir+os.sep+args.Outfile, args.crispr,
+    subprocess.run(["Rscript", "menthu.R", ".."+os.sep+outdir+os.sep+"MENTHUSummary_"+args.Outfile, args.crispr,
                     args.pam, args.dist2dsb, args.overhang,
                     args.talenOption, args.talenScheme, args.genInputType, args.genInput, args.scoreThreshold,
                     args.T7opt, args.verbose, args.validate])
@@ -35,15 +35,15 @@ def runMenthu(args):
             break
     # shutil.move(args.Outfile, ".." + os.sep + args.Outfile)
     os.chdir("..")
-    runLindel(args.Outfile, lindeldir)
+    runLindel("MENTHUSummary_"+args.Outfile, args.Outfile, lindeldir)
 
 
-def runLindel(outfile, lindeldir):
+def runLindel(menthuoutfile, outfile, lindeldir):
     # shutil.move(outfile, lindeldir + os.sep + outfile)
     outdir = "MENdel_Output"
     # os.chdir(lindeldir)
     os.chdir(outdir)
-    df = pd.read_csv(outfile)
+    df = pd.read_csv(menthuoutfile)
     i = 0
     lindelScore = []
     lindelPrediction = []
@@ -78,27 +78,33 @@ def runLindel(outfile, lindeldir):
             fh = open(str(outfile[:-4]) + "_" + str(i + 1) + ".tsv", "r+")
             content = fh.read()
             fh.seek(0, 0)
+            pd.set_option('display.max_rows', None)
+            pd.set_option('display.max_columns', None)
+            pd.set_option('display.width', None)
+            pd.set_option('display.max_colwidth', None)
             fh.write(str(df.iloc[i]) + "\n" + str(content))
             fh.close()
         # shutil.move(str(outfile[:-4]) + "_" + str(i + 1) + ".tsv",
         #             ".." + os.sep + str(outfile[:-4]) + "_" + str(i + 1) + ".tsv")
         i += 1
     # shutil.move(outfile, ".." + os.sep + outfile)
-    outputProcessing(outfile, lindelScore, lindelPrediction)
+    outputProcessing(menthuoutfile, outfile, lindelScore, lindelPrediction)
 
 
-def outputProcessing(outfile, lindelScore, lindelPrediction):
+def outputProcessing(menthuoutfile, outfile, lindelScore, lindelPrediction):
     # os.chdir("..")
     fhs = open("MENdelSummary_" + str(outfile[:-4]) + ".tsv", "w")
+    index = 1
     fhs.write(
-        "Target Sequence\tMENdel SMO\tSMO via MENTHU\tMENTHU Score\tMENTHU Microhomology\tMENTHU Frameshift\t"
+        "Index\tTarget Sequence\tMENdel SMO\tSMO via MENTHU\tMENTHU Score\tMENTHU Microhomology\tMENTHU Frameshift\t"
         "SMO via Lindel\tLindelScore\tLindel Inserted base\tMENdel Frameshift\n")
-    fhr = open(os.getcwd() + os.sep + str(outfile[:-4]) + ".csv")
+    fhr = open(os.getcwd() + os.sep + str(menthuoutfile[:-4]) + ".csv")
     i = 0
     fhr.readline()
     for line in fhr:
         menthuOut = line.rstrip().split(",")
-        fhs.write(str(menthuOut[0]) + "\t")
+        fhs.write(str(index) + "\t" + str(menthuOut[0]) + "\t")
+        index += 1
         # print(menthuOut[1], lindelScore[i])
         if float(menthuOut[1]) > 1.5 or float(lindelScore[i]) > 50.00:
             #fhs.write("1\t")
