@@ -75,7 +75,7 @@ cd MENdel_root
    The parameters are explained below. Each parameter is delimited by a space. Parameter values should not have spaces; if you want to put spaces in the output file name, the name should be in quotes, e.g. "output File.csv". Parameter values (including strings) do not have to be in quotes, except for the output file name exception. All parameters values can be kept to default with the exception of output file name, gen input type, and gen input
    
    |**Parameter        |Flag|Accepted Values|Default|Explanation** |
-   |-----------------  |---------------|-------|--------------|
+   |-----------------  |---------------|-------|-------------------|
    |**outFile**        |-o|Character string followed by extension|MENdel_outfile.csv|The name of the file to output your results to. If using a fasta file with multiple sequences, multiple files will be created, using this as a prefix|
    |**CRISPR Option**  |-c|T or F         |T      |T or F Flags the system to use CRISPR nuclease processing. If this option is T (true) "TALEN Option" must be F (false). **Must be T for MENdel**|
    |**PAM Sequence**   |-p|A PAM sequence |NGG    |The PAM sequence for the CRISPR sequence. Ambiguous nucleotides are allowed. Using N will scan every possible cut site in the target sequence. This parameter must be present, but is not used, if "CRISPR Option" is false (i.e., you can put a 0 or NA in this spot.). **Must be NGG for MENdel**|
