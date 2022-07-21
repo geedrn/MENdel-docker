@@ -115,3 +115,15 @@ cd MENdel_root
    ```
    python MENdelScript.py -o GenBankTalenExample.csv -g gb -i AY214391.1
    ```
+
+### MENdel docker version
+From Docker Hub
+```
+docker pull geedrn/mendel 
+# Go to the directory that you want to use it for outputting, the current directory will concatenating with MENdel_output
+docker run -it --rm -v $(pwd):/MENdel_root/MENdel_Output geedrn/mendel
+```
+If you prefer to make Docker image locally
+```
+docker build . -t IMAGE NAME
+```
