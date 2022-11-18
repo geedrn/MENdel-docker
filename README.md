@@ -2,53 +2,22 @@
 
 This repository contains python scripts for running MENdel (Martínez-Gálvez et al., *Nucleic Acids Research*, 2021) via a commandline interface. MENdel is a binary classifier that predicts the occurrence of Microhomology-Mediated End Joining (MMEJ) or 1bp-insertion derived single majority outcomes (SMOs) as a result of targeted DNA double strand break repair (DSBR). SMOs are DSBR outcomes where a single sequence is represented at a frequency of 0.50 or higher. MENdel combines the MMEJ-deletion predictions of MENTHU (Mann & Martínez-Gálvez et al., *Nucleic Acids Research*, 2019) and the insertion predictions of Lindel (Chen et al., *Nucleic Acids Research*, 2019) to generate SMO predictions. MENdel is compatible with Linux, Mac, Windows (using Cygwin), and Windows CMD. To run MENdel, it is required that the user has MENTHU-command-line and Lindel cloned locally. Follow the instructions given below to install each of these tools.
 
+# INSTALLATION of MENdel docker version
+From Docker Hub
 ```
-mkdir MENdel_root
-cd MENdel_root
+docker pull geedrn/mendel 
+# Go to the directory that you want to use it for outputting, the current directory will concatenating with MENdel_output
+docker run -it --rm -v $(pwd):/MENdel_root/MENdel_Output geedrn/mendel
+# Run commands
+python MENdelScript.py -g gb -i AY214391.1
+# Your results are in your current directory! DONE!
+```
+If you prefer to make Docker image locally
+```
+docker build . -t IMAGE NAME
 ```
 
-1. **MENTHU-command-line installation**
-   
-   Follow instructions at https://github.com/FriedbergLab/MENTHU-command-line to install the commandline version of MENTHU within the previously created directory MENdel_root. The README file contains instructions to download and install R and necessary R packages to run MENTHU, if not already present. **Only install MENTHU-command-line and required packages. Do not run it at this step.**
-
-2. **Lindel installation**
-
-   Lindel is compatible with ```Python2.7``` and ```Python3.5``` or higher.
-   
-   Unix users will have Python pre-installed on their systems, however follow instructions given at https://docs.python.org/3/using/unix.html for any additional features installation
-   
-   Windows users can follow instructions to install Python given at https://docs.python.org/3/using/windows.html
-   
-   After successful setup of Python, follow instructions at https://github.com/FriedbergLab/Lindel (originally from https://github.com/shendurelab/Lindel, but forked here for convenience) to install Lindel within the directory MENdel_root
-
-3. **MENdel and required Python packages installation**
-
-   Navigate to the previously created directory MENdel_root and follow these instructions to install scripts to run MENdel.
-   
-   ```
-   git clone https://github.com/FriedbergLab/MENdel-command-line/
-   cd MENdel-command-line
-   ```
-   
-   Alternatively, use the green "Code" button in the upper right corner and choose "Download ZIP"
-   
-   **Required Python packages installation**
-   
-   - For Windows users
-   
-   ```
-   Windows_InstallPackages.bat
-   ```
-   
-   Alternatively, double-click on the .bat file to run it.
-   
-   - For Linux/Mac/Windows using WSL or Cygwin users
-   
-   ```
-   bash InstallPackages.sh
-   ```
-
-4. **Running MENdel**
+1. **Running MENdel**
 
    MENdel-command-line can be run from Unix-like command lines (Linux, Mac, Cygwin on Windows) or Windows CMD. However, due to end-of-line conversion differences between Unix and DOS for MENTHU, **you must use MENdelScript.py on Linux, Mac, and Cygwin, and Windows_MENdelScript.py in Windows CMD**. 
 
@@ -70,7 +39,7 @@ cd MENdel_root
    
    "python" tells the system to use ```python``` to execute ```MENdelScript.py``` (or ```Windows_MENdelScript.py``` for Windows CMD).
    
-5. **Parameter explanation**
+2. **Parameter explanation**
 
    The parameters are explained below. Each parameter is delimited by a space. Parameter values should not have spaces; if you want to put spaces in the output file name, the name should be in quotes, e.g. "output File.csv". Parameter values (including strings) do not have to be in quotes, except for the output file name exception. All parameters values can be kept to default with the exception of output file name, gen input type, and gen input
    
@@ -90,11 +59,11 @@ cd MENdel_root
    |**Verbose**        |-v  |T or F       |F        |If T (true), outputs progress messages to the console.|
    |**Validate**       |-va |T or F       |F        |If T (true), checks the command line arguments to make sure they are all valid (this may take some time); if F, skip validation checks.|
 
-6. **Frameshift mutation prediction via MENdel**
+3. **Frameshift mutation prediction via MENdel**
    
    When both MENTHU and Lindel predict an SMO, but MENTHU predicts a non-frameshift mutation, we output MENdel frameshift as a **Yes** since Lindel has a better positive predictive value than MENTHU.
 
-8. **Examples**
+4. **Examples**
 
    Find outputs inside a directory named **MENdel_Output** located under **MENdel_root**.
 
@@ -115,15 +84,3 @@ cd MENdel_root
    ```
    python MENdelScript.py -o GenBankTalenExample.csv -g gb -i AY214391.1
    ```
-
-### MENdel docker version
-From Docker Hub
-```
-docker pull geedrn/mendel 
-# Go to the directory that you want to use it for outputting, the current directory will concatenating with MENdel_output
-docker run -it --rm -v $(pwd):/MENdel_root/MENdel_Output geedrn/mendel
-```
-If you prefer to make Docker image locally
-```
-docker build . -t IMAGE NAME
-```
